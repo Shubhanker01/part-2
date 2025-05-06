@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Filter from "./components/Filter"
 import FormSubmit from "./components/FormSubmit"
 import DisplayContacts from "./components/DisplayContacts"
+import axios from 'axios'
 
 function App() {
   const [persons, setPersons] = useState([
@@ -10,6 +11,15 @@ function App() {
   const [newName, setNewName] = useState('')
   const [phone, setPhone] = useState('')
   console.log(persons)
+  // fetch data from server
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons').then((res) => {
+      let data = res.data
+      console.log(data)
+    }).catch((err) => {
+      console.log(err)
+    })
+  }, [])
   return (
     <>
       <div>
