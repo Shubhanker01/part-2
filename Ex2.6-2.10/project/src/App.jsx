@@ -1,45 +1,24 @@
 import { useState } from "react"
+import Filter from "./components/Filter"
+import FormSubmit from "./components/FormSubmit"
+import DisplayContacts from "./components/DisplayContacts"
 
 function App() {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', phone: '993039039' }
   ])
   const [newName, setNewName] = useState('')
-  const handleChange = (e) => {
-    setNewName(e.target.value)
-  }
-  const checkDuplicate = () => {
-    for(let i=0;i<persons.length;i++){
-      
-    }
-  }
-  const submitName = (e) => {
-    e.preventDefault()
-    let newObj = {
-      name: newName
-    }
-    setPersons(persons.concat(newObj))
-    setNewName("")
-  }
+  const [phone, setPhone] = useState('')
   console.log(persons)
   return (
     <>
       <div>
         <h2>Phonebook</h2>
-        <form onSubmit={submitName}>
-          <div>
-            name: <input type="text" onChange={handleChange} value={newName} />
-          </div>
-          <div>
-            <button type="submit">add</button>
-          </div>
-        </form>
+        <Filter persons={persons} />
+        <h2>Add a new</h2>
+        <FormSubmit persons={persons} setPersons={setPersons} newName={newName} setNewName={setNewName} phone={phone} setPhone={setPhone} />
         <h2>Numbers</h2>
-        {
-          persons.map((person) => {
-            return <p key={person.name}>{person.name}</p>
-          })
-        }
+        <DisplayContacts persons={persons} />
       </div>
     </>
   )
