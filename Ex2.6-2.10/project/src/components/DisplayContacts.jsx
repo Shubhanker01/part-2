@@ -1,11 +1,18 @@
 import React from 'react'
+import Delete from './Delete'
 
-function DisplayContacts({persons}) {
+function DisplayContacts({ persons, setPersons }) {
+
     return (
         <>
             {
                 persons.map((person) => {
-                    return <p key={person.name}>{person.name} {person.phone}</p>
+                    return (
+                        <div key={person.id}>
+                            <p>{person.name} {person.number}</p>
+                            <Delete person={person} persons={persons} setPersons={setPersons}/>
+                        </div>
+                    )
                 })
             }
         </>

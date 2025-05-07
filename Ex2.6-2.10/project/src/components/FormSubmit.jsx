@@ -1,6 +1,9 @@
 import React from 'react'
+import { addNewPerson, updateExistingPerson } from '../services/services'
+
 
 function FormSubmit({ persons, setPersons, newName, setNewName, phone, setPhone }) {
+
     const handleChange = (e) => {
         setNewName(e.target.value)
     }
@@ -17,17 +20,43 @@ function FormSubmit({ persons, setPersons, newName, setNewName, phone, setPhone 
         }
         return false
     }
+
     const submitName = (e) => {
         e.preventDefault()
         let newObj = {
             name: newName,
-            phone: phone
+            number: phone
         }
+        // if the contact already exists
         if (checkDuplicate(newObj)) {
-            alert(`${newObj.name} is already added`)
-            return
+            if (window.confirm(`${newObj.name} is already added to phonebook, replace the old number with a new one?`)) {
+                let user = persons.filter((person) => {
+                    if (person.name === newObj.name) {
+                        return person
+                    }
+                })
+                console.log(user)
+                let id = user[0].id
+                updateExistingPerson(id, newObj).then((res) => {
+                    console.log(res)
+                    setPersons(persons.map((person) => {
+                        if (person.id === res.id) {
+                            person.number = res.number
+                        }
+                        return person
+                    }))
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }
+            return;
         }
-        setPersons(persons.concat(newObj))
+        addNewPerson(newObj).then((data) => {
+            setPersons(persons.concat(data))
+        }).catch((err) => {
+            console.log(err)
+        })
+
         setNewName("")
         setPhone("")
     }
