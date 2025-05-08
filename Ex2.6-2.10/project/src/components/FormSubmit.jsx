@@ -2,7 +2,7 @@ import React from 'react'
 import { addNewPerson, updateExistingPerson } from '../services/services'
 
 
-function FormSubmit({ persons, setPersons, newName, setNewName, phone, setPhone }) {
+function FormSubmit({ persons, setPersons, newName, setNewName, phone, setPhone, setSuccessMessage, setType, setError }) {
 
     const handleChange = (e) => {
         setNewName(e.target.value)
@@ -45,16 +45,24 @@ function FormSubmit({ persons, setPersons, newName, setNewName, phone, setPhone 
                         }
                         return person
                     }))
+                    setSuccessMessage(true)
+                    setType("Successfully updated existing contact")
                 }).catch((err) => {
                     console.log(err)
+                    setError(true)
+                    setType(`Information of ${newObj.name} has already been removed from server`)
                 })
             }
             return;
         }
         addNewPerson(newObj).then((data) => {
             setPersons(persons.concat(data))
+            setSuccessMessage(true)
+            setType("New Contact successfully added")
         }).catch((err) => {
             console.log(err)
+            setError(true)
+            setType(err.message)
         })
 
         setNewName("")
